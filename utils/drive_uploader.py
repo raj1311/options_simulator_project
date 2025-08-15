@@ -29,7 +29,8 @@ def get_drive(service_account_json: str) -> GoogleDrive:
 
 def ensure_folder(drive: GoogleDrive, name: str, parent_id: Optional[str]) -> str:
     """Create (or find) a folder by name under parent_id; return its file ID."""
-    q = f"mimeType='application/vnd.google-apps.folder' and name='{name.replace(\"'\",\"\\'\")}' and trashed=false"
+    safe_name = name.replace("'", "\\'")
+    q = f"mimeType='application/vnd.google-apps.folder' and name='{safe_name}' and trashed=false"
     if parent_id:
         q += f" and '{parent_id}' in parents"
     items = drive.ListFile({'q': q}).GetList()
@@ -46,7 +47,8 @@ def ensure_folder(drive: GoogleDrive, name: str, parent_id: Optional[str]) -> st
 def upload_file(drive: GoogleDrive, local_path: str, parent_id: str) -> str:
     """Upload a single file, updating if a file with same name exists; return file id."""
     name = os.path.basename(local_path)
-    q = f"title='{name.replace(\"'\",\"\\'\")}' and '{parent_id}' in parents and trashed=false"
+    safe_name = name.replace("'", "\\'")
+    q = f"title='{safe_name}' and '{parent_id}' in parents and trashed=false"
     items = drive.ListFile({'q': q}).GetList()
     if items:
         f = items[0]
