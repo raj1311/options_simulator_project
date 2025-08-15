@@ -33,11 +33,12 @@ with st.sidebar.expander("Google Drive ingest", expanded=False):
     if st.button("Ingest from Drive"):
         import subprocess, sys
         from pathlib import Path
-root_dir = Path(__file__).resolve().parent
-cmd = [sys.executable, "-m", "scripts.ingest_from_drive"]
-
-        if spot_link: cmd += ["--spot", spot_link]
-        if fo_link: cmd += ["--fo", fo_link]
+        root_dir = Path(__file__).resolve().parent
+        cmd = [sys.executable, "-m", "scripts.ingest_from_drive"]
+        if spot_link:
+            cmd += ["--spot", spot_link]
+        if fo_link:
+            cmd += ["--fo", fo_link]
         if target_parquet:
             cmd += ["--parquet", target_parquet]
         elif target_duckdb:
@@ -45,11 +46,11 @@ cmd = [sys.executable, "-m", "scripts.ingest_from_drive"]
         else:
             st.error("Specify Parquet dir OR DuckDB file.")
             st.stop()
-        st.info("Starting ingestion... this may take a long time for 15GB + network latency.")
         if upload_to_drive:
             cmd += ["--upload-to-drive"]
             if drive_folder_id:
                 cmd += ["--drive-folder-id", drive_folder_id]
+        st.info("Starting ingestion... this may take a long time for 15GB + network latency.")
         code = subprocess.call(cmd, cwd=str(root_dir))
         if code == 0:
             st.success("Ingestion completed. Fill paths above and reload the app.")
