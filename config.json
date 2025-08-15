@@ -1,0 +1,7 @@
+{
+  "note": "You can point the app to these files from the sidebar.",
+  "samples": {
+    "spot_csv": "/mnt/data/NIFTY_50_STRIKE_PRICE_ALL.csv",
+    "fo_csv": "/mnt/data/NIFTY50_FNO_2010.csv"
+  }
+}
